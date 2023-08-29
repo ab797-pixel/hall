@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!--style css-->
         <link rel="dns-prefetch" href="//fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+      <!--  <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">-->
    
        <link href="css/bootstrap.min.css" rel="stylesheet">
        <!-- script js-->
@@ -26,6 +26,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+      <li class="nav-item dropdown">
+          <a class="nav-link" href="index.php?info=college_details" style="color:red"> College Details</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" aria-current="page" style="color:red" href="index.php?info=home">Home</a>
         </li>
@@ -39,6 +42,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link" href="index.php?info=hall" style="color:red"> Hall </a>
         </li>
+        
        
       </ul>
       <!-- <form class="d-flex">
@@ -69,9 +73,14 @@
 						 {
 						 include('home.php');
 						 }
+            else if($info=="college_details")
+						 {
+						 include('college_detail.php');
+						 }
                     }
                   
     ?>
+  
 
     </body>
 </html>

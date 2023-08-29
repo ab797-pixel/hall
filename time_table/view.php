@@ -110,6 +110,7 @@ function formToggle(ID){
             $sessions = $db->query("SELECT * FROM time_tables WHERE date='$date'");
             $sessions = $sessions->fetch_all(MYSQLI_ASSOC);
             //echo json_encode($sessions);
+            $i =1;
             foreach($sessions as $session){
             ?>
                 <td><?php echo $session['session'];?></td>
@@ -126,8 +127,8 @@ function formToggle(ID){
             </td>
             
              <td class="align-middle"   style="text-align:center;">
-            
-             <a class="btn btn-info"   onclick="create_hall('<?php echo $date?>')" id="<?php echo $date?>" >Create Hall</a>
+        
+             <a class="btn btn-info"   onclick="create_hall('<?php echo $date;?>')" id="<?php echo $date;?>" >Create Hall</a>
              <div class="<?php echo $date?>" >
               <span class="visually-hidden">Loading...</span>
              </div>
@@ -139,6 +140,7 @@ function formToggle(ID){
         <tbody>
 
        <?php
+       $i++;
         }
        ?>
         
@@ -148,55 +150,37 @@ function formToggle(ID){
 </table>
 
 
-    <!-- <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>#</th>
-                <th>date</th>
-                <th>day</th>
-                <th>session</th>
-                <th>subcode</th>
-                <th>graduate</th>
-                <th>action</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php 
-        // Get member rows 
-        $result = $db->query("SELECT * FROM time_tables ORDER BY date"); 
-        if($result->num_rows > 0){ $i=0; 
-            while($row = $result->fetch_assoc()){ $i++; 
-        ?>
-            <tr>
-                <td><?php echo $i; ?></td>
-                <td><?php echo $row['date']; ?></td>
-                <td><?php echo $row['day']; ?></td>
-                <td><?php echo $row['session']; ?></td>
-                <td><?php echo $row['subcode']; ?></td>
-                <td><?php echo $row['graduate']; ?></td>
-                <td class="align-middle"   style="text-align:center;">
-                <?php
-                $date = $row['date'];
-                $session = $row['session'];
-                //  echo $date;
-                //  echo $session;
-                ?>
-             <a class="btn btn-info"   onclick="create_hall('<?php echo $date?>','<?php echo $session?>');" id="" >Create Hall</a>
-             <div class="" >
-              <span class="visually-hidden">Loading...</span>
-             </div>
-            </td>
-                
-            </tr>
-        <?php } }else{ ?>
-            <tr><td colspan="6">No member(s) found...</td></tr>
-        <?php } ?>
-        </tbody>
-    </table> -->
 </div>
 <script>
+     $.ajaxSetup({
+    headers:{
+        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+    }
+   });
+       $(document).ready(function(){
+        
+    $.ajax({
+        url:'hall/getdate.php',
+        type:"get",
+        datatype:'json',
+        success: function(date){
+           console.log(date);
+           date = date.split(',');
+           num = date.length;
+           console.log(date);
+          for(var i = 0;i < num ; i++){  
+            date1 = date[i].replace(/]]/g,'').replace(/]/g,'').replace(/\[/g,'').replace(/\"/g,'');
+           
+            $("#"+date1).html("Hall Created").css({'background-color':'green','font-size':'20px'}).removeAttr("onclick");
+          }
+        },
+        error: function(err){
+           
+        },
+    });
+   });
      function create_hall(date){
-     alert('hi '+date);
+     
     $("#"+date).removeAttr("onclick").html("Hall creating...").css({'background-color':'aqua'});
     $("."+date).addClass("spinner-border text-primary").addClass("status");
     
@@ -209,13 +193,13 @@ function formToggle(ID){
         datatype:'json',
         success: function(res){
             console.log(res);
-        //     var date = res.date;
+            var date = res;
             
-        //    $("#"+date).html("Hall Created")
-        //               .css({'background-color':'green','font-size':'20px'})
-        //               .removeAttr("onclick")
-        //    $("."+date).removeClass("spinner-border text-primary")
-        //               .removeClass("status");
+           $("#"+date).html("Hall Created")
+                      .css({'background-color':'green','font-size':'20px'})
+                      .removeAttr("onclick")
+           $("."+date).removeClass("spinner-border text-primary")
+                      .removeClass("status");
           
         },
         error: function(err){

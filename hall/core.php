@@ -45,7 +45,7 @@ foreach($sessions as $session){
                 // echo 'subcode'.$subcode.'<br>';
                 // echo 'reg'.$students["reg_no"].'<br>';
                 // echo 'dept '.$students["subject"].'<br>';
-               $db->query("INSERT INTO galy_time_tables (hall_number, date, session, subcode, degree, subject, reg_no) VALUES ('".$i."', '".$date."', '".$session."', '".$subcode."', '".$students['degree']."', '".$students['subject']."', '".$students['reg_no']."')");    
+              $db->query("INSERT INTO galy_time_tables (hall_number, date, session, subcode, degree, subject, reg_no) VALUES ('".$i."', '".$date."', '".$session."', '".$subcode."', '".$students['degree']."', '".$students['subject']."', '".$students['reg_no']."')");    
                 $a++;
                 if($a > 15){
                     $i++;
@@ -54,7 +54,8 @@ foreach($sessions as $session){
         }
     } 
 }
-$galies_time_tables = $db->query("select * from galy_time_tables where date='.$date.'");
-$galies_time_tables = $galies_time_tables->fetch_assoc();
-return $galies_time_tables;
+echo $date;
+// $galies_time_tables = $db->query("select  * from galy_time_tables where date='.$date.'");
+// $galies_time_tables = $galies_time_tables->fetch_all(MYSQLI_ASSOC);
+// echo json_encode($galies_time_tables);
 ?>
