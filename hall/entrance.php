@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>short hall</title>
+    <title>entrance hall</title>
     <script type="text/javascript">
        
     </script>
@@ -59,43 +59,41 @@
         </tr>
         <?php
         include_once "../database/database.php";
-        $subjects = $db->query("select * from galy_time_tables where date = '$date' and session = '$session' group by subject order by degree");
-        $subjects = $subjects->fetch_all(MYSQLI_ASSOC);
-        foreach($subjects as $subject=>$halls){
-            $subject = $halls['subject'];
-            $halls = $db->query("select * from galy_time_tables where date = '$date' and session = '$session' and subject = '$subject' ");
-            $halls = $halls->fetch_all(MYSQLI_ASSOC);
-            foreach($halls as $hall=>$students){
-                $hall = $students['hall_number'];
-                 $last
-                
-                // $entrance_tables[$subject][$hall]=array(
-                //     "first" => $first_reg,
-                //     "last"  => $second_reg,
-                // );
-
-
-         
+        
+         $subjects = $db->query("select distinct subject , hall_number from galy_time_tables where date = '$date' and session = '$session'");
+         $subjects = $subjects->fetch_all(MYSQLI_ASSOC);
+  
+         foreach($subjects as $item){
+           // echo json_encode($item)."<br>";
+            $subject = $item['subject'];
+            $hall = $item['hall_number'];
+            //echo json_encode($item)."<br>"; 
+            $first_row = $db->query("select * from galy_time_tables where date = '$date' and session = '$session' and subject ='$subject' and  hall_number = '$hall' order by  id asc limit 1 ");
+            $first_row  = $first_row->fetch_array(MYSQLI_ASSOC);
+            $last_row =   $db->query("select * from galy_time_tables where date = '$date' and session = '$session' and subject ='$subject'  and hall_number = '$hall' order by id desc limit 1 ");
+            $last_row = $last_row->fetch_array(MYSQLI_ASSOC);
+            $halls = array(
+                  "first_row" => $first_row,
+                  "last_row"  => $last_row
+           );
+              foreach($halls as $row=>$student){
+               // echo json_encode($halls);
+              }
         ?>
         
-        <!-- <tr style="text-align:center;">
-            <td><b>{{$hall['first']->subject}}\{{$hall['first']->subcode}}\{{$hall['first']->degree}}</b></td>
-            <td colspan="2"><b>{{$hall['first']->reg_no}} TO {{$hall['last']->reg_no}}</b></td>
-            
-            <td><b>{{$hall['first']->hall_number}}</b></td>
-        </tr> -->
+    
         <tr style="text-align:center;">
-            <td><b><?php echo $students['subject']?> \<?php  echo $students['subcode']?>\<?php  echo $students['degree']?></b></td>
-            <td colspan="2"><b><?php echo $students['reg_no'] ?> TO </b></td>
+            <td><b><?php echo json_encode($halls['first_row']['subject'])?> \<?php  echo json_encode($halls['first_row']['subcode'])?>\<?php  echo json_encode($halls['first_row']['degree'])?></b></td>
+            <td colspan="2"><b><?php echo json_encode($halls['first_row']['reg_no']) ?> TO <?php echo json_encode($halls['last_row']['reg_no'])?></b></td>
             
-            <td><b><?php echo $students['hall_number']; ?></b></td>
+            <td><b><?php echo $hall; ?></b></td>
         </tr>
         
     <?php
-       }
+        
+      }
        // echo json_encode($subject)."<br>";
-
-    }
+   
     ?>
       
         

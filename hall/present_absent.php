@@ -78,6 +78,9 @@
         $group_subject = $group_subject->fetch_all(MYSQLI_ASSOC);
        
         foreach($group_subject as $student){
+            $subject = $student['subject'];
+            $last_row =   $db->query("select reg_no from galy_time_tables where date = '$date' and session = '$session' and subject ='$subject'  and hall_number = '$i' order by id desc limit 1 ");
+           $last_row = $last_row->fetch_array();
       
     ?>
     
@@ -93,9 +96,9 @@
         <td></td>
     </tr> -->
     <tr style="text-align:center;" >
-        <td><b><?php echo $student['degree']?>/<?php echo $student['subject']?></b></td>
+        <td><b><?php echo $student['degree']?>/<?php echo $subject?></b></td>
         <td><b><?php echo $student['subcode']?></b></td>
-        <td><b><?php echo $student['reg_no']?> to {{$dept['last']->reg_no}}</b></td>
+        <td><b><?php echo $student['reg_no']?> to <?php  echo json_encode($last_row['reg_no'])?></b></td>
         <td><b></b></td>
         <td></td>
         <td></td>
